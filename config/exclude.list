@@ -1,0 +1,5 @@
+# 永久保留的软件包
+linux-image-generic
+docker-ce
+nginx
+mysql-server
