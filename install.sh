@@ -1,14 +1,29 @@
-#!/bin/bash
+name: APT Cache Cleaner
 
-echo "🧼 Starting apt cleanup..."
+on:
+  schedule:
+    - cron: "0 0 * * *"  # 每天UTC 0点运行
+  workflow_dispatch:     # 允许手动触发
 
-echo "📦 Updating and upgrading packages..."
-apt update && apt upgrade -y
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10  # 防止长时间卡死
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-echo "🗑 Running autoremove..."
-apt autoremove -y
-
-echo "🧹 Cleaning apt cache..."
-apt clean
-
-echo "✅ Done. System cleaned!"
+      - name: Clean APT Cache
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script_timeout: 5m  # SSH超时设置
+          script: |
+            echo "🔄 连接到服务器..."
+            cd /tmp
+            wget -q https://raw.githubusercontent.com/${{ github.repository }}/main/cleanup.sh
+            chmod +x cleanup.sh
+            ./cleanup.sh
