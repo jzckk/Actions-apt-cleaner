@@ -1,0 +1,16 @@
+name: Auto apt clean
+
+on:
+  schedule:
+    - cron: '0 4 * * 0'  # 每周日凌晨 4 点自动运行
+  workflow_dispatch:     # 允许手动触发
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Free up space
+        run: |
+          sudo apt update && sudo apt upgrade -y
+          sudo apt autoremove -y
+          sudo apt clean
