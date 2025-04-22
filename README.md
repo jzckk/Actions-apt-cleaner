@@ -27,7 +27,7 @@
 ## 🚀 一键安装
 
 ```bash
-sudo bash <(curl -sL https://raw.githubusercontent.com/jzckk/Actions-apt-cleaner/main/scripts/install.sh)
+sudo bash <(curl -sL https://raw.githubusercontent.com/jzckk/Actions-apt-cleaner/main/install.sh)
 ```
 
 ---
@@ -44,6 +44,9 @@ sudo apt-cleaner --dry-run
 
 # 查看实时日志
 tail -f /var/log/apt-cleaner/clean-$(date +%Y%m%d).log
+
+# 卸载
+sudo apt-cleaner-uninstall
 ```
 
 ### 高级配置
@@ -122,7 +125,7 @@ tail -f /var/log/apt-cleaner/clean-$(date +%Y%m%d).log
 │   └── logrotate.conf
 ├── scripts
 │   ├── clean.sh
-│   └── install.sh
+│── install.sh
 └── .github
     └── workflows
         └── clean.yml
