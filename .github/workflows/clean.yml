@@ -1,1 +1,11 @@
-
+name: APT Cache Cleaner
+on:
+  workflow_dispatch:  # 允许手动触发
+jobs:
+  test-connection:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Print Hello World
+        run: echo "🎉 GitHub Actions 运行成功！"
