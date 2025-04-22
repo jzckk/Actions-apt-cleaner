@@ -1,24 +1,29 @@
 # Actions-apt-cleaner
 
-一个 GitHub Actions 自动化项目，用于定期清理 Ubuntu/Debian 系统中无用的软件包和缓存，节省磁盘空间，保持系统整洁。
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/jzckk/Actions-apt-cleaner/cleanup.yml)
+![License](https://img.shields.io/github/license/jzckk/Actions-apt-cleaner)
+
+一个自动化 APT 清理工具，适用于 Ubuntu/Debian 系统，可帮助你定期清理无用软件包和缓存，释放磁盘空间。支持 GitHub Actions 自动运行，也可本地一键执行。
 
 ## ✨ 功能
+
 - 自动执行 `apt autoremove && apt clean`
-- 每周定期运行，或可手动触发
-- 日志输出清晰，便于排查
-- 使用 Bash + GitHub Actions 实现，简单可靠
+- 支持 GitHub Actions 定时运行（每周）
+- 清理日志可下载查看
+- 提供一键执行入口
 
-## 🚀 使用方式
+## 🚀 快速开始
 
-1. Fork 本项目或复制结构
-2. 在 GitHub Actions 页面手动触发 `Clean APT Cache`，或等待定时任务自动执行
-3. 查看日志结果，确认清理是否成功
+### ✅ 方式一：在 GitHub Actions 中使用
 
-## 📁 项目结构
+1. Fork 本项目
+2. 打开 Actions 页面，点击 `Run workflow` 即可立即执行
+3. 或者等待每周定时清理
+4. 执行后可下载清理日志
 
-## 🧩 一键清理脚本（可用于 VPS / 本地）
+### ✅ 方式二：一键清理本地 VPS
 
-无需克隆项目，只需一行命令：
+无需克隆项目，只需执行：
 
 ```bash
 bash <(curl -L -s https://raw.githubusercontent.com/jzckk/Actions-apt-cleaner/main/install.sh)
