@@ -1,6 +1,13 @@
 #!/bin/bash
 set -eo pipefail
 
+# 颜色定义
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+CYAN='\033[0;36m'
+NC='\033[0m'
+
 # 加载配置
 EXCLUDE_FILE="/etc/apt-cleaner/exclude.list"
 declare -a EXCLUDE_PKGS
@@ -18,7 +25,7 @@ exec > >(tee -a "$LOG_FILE") 2>&1
 MIN_SPACE_GB=5
 current_space_gb=$(df / --output=avail -B1 | awk 'NR==2 {print $1/1024/1024/1024}')
 if (( $(echo "$current_space_gb < $MIN_SPACE_GB" | bc -l) )); then
-    echo "剩余空间不足${MIN_SPACE_GB}GB，清理已终止！"
+    echo -e "${RED}❌ 剩余空间不足 ${MIN_SPACE_GB}GB，清理已终止！${NC}"
     exit 1
 fi
 
@@ -26,27 +33,28 @@ fi
 DRY_RUN=0
 if [[ "$1" == "--dry-run" ]]; then
     DRY_RUN=1
-    echo "=== 模拟运行模式 ==="
+    echo -e "${YELLOW}🔍 模拟运行模式开启，仅显示将要执行的操作${NC}"
 fi
 
 # 内核清理逻辑
 clean_kernels() {
+    echo -e "\n${CYAN}========== 内核清理 ==========${NC}"
     current_kernel=$(uname -r | sed 's/-.*//')
-    echo "当前运行内核: $current_kernel"
-    
+    echo -e "${YELLOW}当前运行内核：${NC} $current_kernel"
+
     all_kernels=($(dpkg -l | awk '/linux-image-[0-9]/ {print $2}' | sort -Vr))
     keep_list=("${all_kernels[0]}" "${all_kernels[1]}")
-    
+
     for kernel in "${all_kernels[@]}"; do
         if [[ " ${keep_list[@]} " =~ " $kernel " ]] || [[ " ${EXCLUDE_PKGS[@]} " =~ " $kernel " ]]; then
-            echo "保留内核: $kernel"
+            echo -e "${GREEN}✔ 保留内核：$kernel${NC}"
             continue
         fi
-        
+
         if [ $DRY_RUN -eq 1 ]; then
-            echo "[模拟] 将移除内核: $kernel"
+            echo -e "${YELLOW}🔸 [模拟] 将移除内核：$kernel${NC}"
         else
-            echo "正在移除内核: $kernel"
+            echo -e "${RED}⚠ 正在移除内核：$kernel${NC}"
             apt-get purge -y "$kernel"
         fi
     done
@@ -54,9 +62,9 @@ clean_kernels() {
 
 # 主清理流程
 main_clean() {
-    echo "=== 开始清理 $(date '+%F %T') ==="
-    
-    # APT清理
+    echo -e "${CYAN}\n========== APT Cleaner 开始执行 $(date '+%F %T') ==========${NC}"
+
+    echo -e "\n${CYAN}========== 清理无用软件包 ==========${NC}"
     if [ $DRY_RUN -eq 1 ]; then
         apt autoremove --dry-run
         apt clean --dry-run
@@ -64,15 +72,16 @@ main_clean() {
         apt autoremove -y
         apt clean
     fi
-    
-    # 内核清理
+
     clean_kernels
-    
-    # 临时文件清理（保留48小时内）
-    find /tmp /var/tmp -type f -mtime +2 -delete
-    
-    echo "=== 清理完成 ==="
+
+    echo -e "\n${CYAN}========== 清理临时文件 ==========${NC}"
+    find /tmp /var/tmp -type f -mtime +2 -print -delete
+
+    echo -e "\n${GREEN}✅ 清理完成！当前磁盘使用情况：${NC}"
     df -h /
+
+    echo -e "\n📁 日志已保存至：${LOG_FILE}"
 }
 
 main_clean
