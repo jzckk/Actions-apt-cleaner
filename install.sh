@@ -1,11 +1,20 @@
 #!/bin/bash
-# Install script for Actions-apt-cleaner
 
-# Download and execute the clean_apt_cache.sh script
-curl -sSL https://raw.githubusercontent.com/jzckk/Actions-apt-cleaner/main/clean_apt_cache.sh -o clean_apt_cache.sh
+# 检查是否root用户，否则尝试sudo
+if [ "$(id -u)" -ne 0 ]; then
+    echo "⚠️ 需要root权限，尝试使用sudo..."
+    sudo -v || { echo "❌ 无法获取sudo权限"; exit 1; }
+fi
 
-# Make it executable
-chmod +x clean_apt_cache.sh
+# 记录清理前的磁盘空间
+echo "📊 清理前磁盘使用情况:"
+df -h /var/cache/apt/
 
-# Execute the script
-./clean_apt_cache.sh
+# 执行清理
+echo "🧹 正在清理APT缓存..."
+apt-get clean -y || { echo "❌ APT清理失败"; exit 1; }
+
+# 记录清理后的磁盘空间
+echo "✅ 清理完成！"
+echo "📊 清理后磁盘使用情况:"
+df -h /var/cache/apt/
