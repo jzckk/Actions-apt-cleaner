@@ -7,6 +7,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 CYAN='\033[0;36m'
 NC='\033[0m'
+BOLD='\033[1m'
 
 # 加载配置
 EXCLUDE_FILE="/etc/apt-cleaner/exclude.list"
@@ -35,6 +36,17 @@ if [[ "$1" == "--dry-run" ]]; then
     DRY_RUN=1
     echo -e "${YELLOW}🔍 模拟运行模式开启，仅显示将要执行的操作${NC}"
 fi
+
+# 伪进度条函数
+progress_bar() {
+    local msg=$1
+    echo -ne "${CYAN}${msg}${NC} ["
+    for i in {1..20}; do
+        echo -ne "#"
+        sleep 0.03
+    done
+    echo "] ✅"
+}
 
 # 内核清理逻辑
 clean_kernels() {
@@ -65,23 +77,30 @@ main_clean() {
     echo -e "${CYAN}\n========== APT Cleaner 开始执行 $(date '+%F %T') ==========${NC}"
 
     echo -e "\n${CYAN}========== 清理无用软件包 ==========${NC}"
+    echo -e "${YELLOW}正在检查系统中不再需要的包和缓存...${NC}"
+    progress_bar "分析系统包"
     if [ $DRY_RUN -eq 1 ]; then
         apt autoremove --dry-run
         apt clean --dry-run
     else
-        apt autoremove -y
+        apt autoremove -y | sed \
+            -e 's/Reading package lists.../正在读取软件包列表.../' \
+            -e 's/Building dependency tree.../正在构建依赖关系树.../' \
+            -e 's/Reading state information.../正在读取状态信息.../'
         apt clean
     fi
 
     clean_kernels
 
     echo -e "\n${CYAN}========== 清理临时文件 ==========${NC}"
+    echo -e "${YELLOW}正在删除超过48小时的临时文件...${NC}"
+    progress_bar "扫描临时目录"
     find /tmp /var/tmp -type f -mtime +2 -print -delete
 
     echo -e "\n${GREEN}✅ 清理完成！当前磁盘使用情况：${NC}"
     df -h /
 
-    echo -e "\n📁 日志已保存至：${LOG_FILE}"
+    echo -e "\n📁 日志已保存至：${BOLD}${LOG_FILE}${NC}"
 }
 
 main_clean
