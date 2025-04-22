@@ -25,7 +25,7 @@
 ### 一键部署（推荐）
 ```bash
 # 标准安装（需要 root 权限）
-sudo bash <(curl -sL https://raw.githubusercontent.com/jzckk/Actions-apt-cleaner/main/scripts/install.sh)
+sudo bash <(curl -sL https://raw.githubusercontent.com/jzckk/Actions-apt-cleaner/main/install.sh)
 
 # 国内镜像加速安装
-sudo bash <(curl -sL https://ghproxy.com/https://raw.githubusercontent.com/jzckk/Actions-apt-cleaner/main/scripts/install.sh)
+sudo bash <(curl -sL https://ghproxy.com/https://raw.githubusercontent.com/jzckk/Actions-apt-cleaner/main/install.sh)
