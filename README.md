@@ -1,6 +1,3 @@
-这是可以直接复制使用的完整 **README.md** 文件内容：
-
-```markdown
 # 🔄 APT Auto Cleaner
 
 [![GitHub License](https://img.shields.io/github/license/jzckk/Actions-apt-cleaner)](https://github.com/jzckk/Actions-apt-cleaner/blob/main/LICENSE)
@@ -130,5 +127,3 @@ tail -f /var/log/apt-cleaner/clean-$(date +%Y%m%d).log
     └── workflows
         └── clean.yml
 ```
-
-直接复制到您的 GitHub 仓库即可使用，无任何分段和缺失内容。
