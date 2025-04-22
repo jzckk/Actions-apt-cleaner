@@ -1,29 +1,31 @@
-# Actions-apt-cleaner
+# 🔄 APT Auto Cleaner
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/jzckk/Actions-apt-cleaner/cleanup.yml)
-![License](https://img.shields.io/github/license/jzckk/Actions-apt-cleaner)
+[![GitHub License](https://img.shields.io/github/license/jzckk/Actions-apt-cleaner)](https://github.com/jzckk/Actions-apt-cleaner/blob/main/LICENSE)
+[![GitHub Stars](https://img.shields.io/github/stars/jzckk/Actions-apt-cleaner)](https://github.com/jzckk/Actions-apt-cleaner/stargazers)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/jzckk/Actions-apt-cleaner/clean.yml)](https://github.com/jzckk/Actions-apt-cleaner/actions)
 
-一个自动化 APT 清理工具，适用于 Ubuntu/Debian 系统，可帮助你定期清理无用软件包和缓存，释放磁盘空间。支持 GitHub Actions 自动运行，也可本地一键执行。
+专为 VPS 和嵌入式设备设计的自动化清理工具，通过智能清理 APT 缓存和旧内核，帮助节省磁盘空间并保持系统健康。
 
-## ✨ 功能
+## ✨ 功能特性
 
-- 自动执行 `apt autoremove && apt clean`
-- 支持 GitHub Actions 定时运行（每周）
-- 清理日志可下载查看
-- 提供一键执行入口
+- **自动化清理**：每日定时执行 `apt autoremove` 和 `apt clean`
+- **安全防护**：
+  - 保留当前运行内核及最近 2 个版本
+  - 禁止在磁盘空间 <5GB 时执行清理
+  - 支持自定义软件包排除列表
+- **智能报告**：
+  - 清理前后磁盘空间对比
+  - 可追踪的详细日志记录
+- **多模式运行**：
+  - 模拟运行 (`--dry-run`) 预览操作
+  - 本地定时任务 / GitHub Actions 远程执行
 
-## 🚀 快速开始
+## 🚀 快速安装
 
-### ✅ 方式一：在 GitHub Actions 中使用
-
-1. Fork 本项目
-2. 打开 Actions 页面，点击 `Run workflow` 即可立即执行
-3. 或者等待每周定时清理
-4. 执行后可下载清理日志
-
-### ✅ 方式二：一键清理本地 VPS
-
-无需克隆项目，只需执行：
-
+### 一键部署（推荐）
 ```bash
-bash <(curl -L -s https://raw.githubusercontent.com/jzckk/Actions-apt-cleaner/main/install.sh)
+# 标准安装（需要 root 权限）
+sudo bash <(curl -sL https://raw.githubusercontent.com/jzckk/Actions-apt-cleaner/main/scripts/install.sh)
+
+# 国内镜像加速安装
+sudo bash <(curl -sL https://ghproxy.com/https://raw.githubusercontent.com/jzckk/Actions-apt-cleaner/main/scripts/install.sh)
