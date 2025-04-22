@@ -1,26 +1,23 @@
-name: Clean APT Cache
+name: Auto Clean
 
 on:
-  workflow_dispatch:
   schedule:
-    - cron: '0 3 * * 0'  # 每周日凌晨 3 点自动执行
+    - cron: '0 3 * * *'  # 每天UTC时间3点
+  workflow_dispatch:
 
 jobs:
-  apt-clean:
+  cleanup:
     runs-on: ubuntu-latest
-    name: Run apt clean on Ubuntu
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Run apt cleaner script
+        
+      - name: Execute Cleaner
         run: |
-          chmod +x ./scripts/apt-clean.sh
-          sudo ./scripts/apt-clean.sh
-
-      - name: Save cleanup log
-        if: always()
-        uses: actions/upload-artifact@v4
+          sudo bash scripts/clean.sh
+          
+      - name: Upload Log
+        uses: actions/upload-artifact@v3
         with:
-          name: apt-clean-log
-          path: /tmp/apt-clean.log
+          name: clean-log
+          path: /var/log/apt-cleaner/*.log
