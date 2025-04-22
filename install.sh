@@ -34,6 +34,12 @@ deploy_scripts() {
     curl -sL https://raw.githubusercontent.com/jzckk/Actions-apt-cleaner/main/scripts/clean.sh \
         -o "$bin_dir/apt-cleaner"
     chmod 755 "$bin_dir/apt-cleaner"
+
+    # 下载卸载脚本
+    curl -sL https://raw.githubusercontent.com/jzckk/Actions-apt-cleaner/main/scripts/uninstall.sh \
+        -o /usr/local/bin/apt-cleaner-uninstall
+    chmod +x /usr/local/bin/apt-cleaner-uninstall
+
     
     # 下载配置文件
     curl -sL https://raw.githubusercontent.com/jzckk/Actions-apt-cleaner/main/config/exclude.list \
