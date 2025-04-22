@@ -31,7 +31,7 @@ deploy_scripts() {
     mkdir -p "$conf_dir"
     
     # 下载主清理脚本
-    curl -sL https://raw.githubusercontent.com/jzckk/Actions-apt-cleaner/main/clean.sh \
+    curl -sL https://raw.githubusercontent.com/jzckk/Actions-apt-cleaner/main/scripts/clean.sh \
         -o "$bin_dir/apt-cleaner"
     chmod 755 "$bin_dir/apt-cleaner"
     
