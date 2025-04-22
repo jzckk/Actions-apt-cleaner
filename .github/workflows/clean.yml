@@ -1,11 +1,19 @@
-name: APT Cache Cleaner
+name: Clean APT Cache
+
 on:
-  workflow_dispatch:  # 允许手动触发
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * 0'  # 每周日凌晨 3 点自动执行
+
 jobs:
-  test-connection:
+  apt-clean:
     runs-on: ubuntu-latest
+    name: Run apt clean on Ubuntu
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Print Hello World
-        run: echo "🎉 GitHub Actions 运行成功！"
+
+      - name: Run apt cleaner script
+        run: |
+          chmod +x ./scripts/apt-clean.sh
+          sudo ./scripts/apt-clean.sh
