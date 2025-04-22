@@ -16,3 +16,9 @@
 
 ## 📁 项目结构
 
+## 🧩 一键清理脚本（可用于 VPS / 本地）
+
+无需克隆项目，只需一行命令：
+
+```bash
+bash <(curl -L -s https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/Actions-apt-cleaner/main/install.sh)
